@@ -3,7 +3,8 @@ var keymap = {
 	"t": 116,
 	"u": 117,
 	"b": 98,
-	"m": 109
+	"m": 109,
+	"enter": 13
 }
 $(function() {
 	var model = {
@@ -29,6 +30,22 @@ $(function() {
 			case keymap.m:
 				model.updateScore(-1, "team2");
 				break;
+		}
+	});
+
+	$("div").on("dblclick", "div.uneditable", function(e) {
+		console.log(e);
+		var t = $(e.currentTarget)
+		t.html('<input type="text" value="'+t.html()+'">');
+		t.removeClass("uneditable").addClass("editable");
+	});
+
+	$("div").on("keypress", "div.editable", function(e) {
+		if (e.keyCode == keymap.enter) {
+			console.log(e);
+			var t = $(e.currentTarget);
+			t.html($(e.target).val());
+			t.removeClass("editable").addClass("uneditable");
 		}
 	});
 
