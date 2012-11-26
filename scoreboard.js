@@ -6,35 +6,42 @@ var keymap = {
 	"m": 109,
 	"enter": 13
 }
+
 $(function() {
 	var model = {
 		"team1": 0,
 		"team2": 0,
 		updateScore: function updateScore(amount, team) {
-			this[team]+= amount;
-			render(this)
+			if (this[team] + amount >= 0) {
+				this[team]+= amount;
+				render(this);
+			}
 		}
 	};
 
+	var editing = false;
+
 	$("html").on("keypress", function(e) {
-		switch(e.keyCode) {
-			case keymap.t:
-				model.updateScore(1, "team1");
-				break;
-			case keymap.u:
-				model.updateScore(1, "team2");
-				break;
-			case keymap.b:
-				model.updateScore(-1, "team1");
-				break;
-			case keymap.m:
-				model.updateScore(-1, "team2");
-				break;
+		if (!editing) {
+			switch(e.keyCode) {
+				case keymap.t:
+					model.updateScore(1, "team1");
+					break;
+				case keymap.u:
+					model.updateScore(1, "team2");
+					break;
+				case keymap.b:
+					model.updateScore(-1, "team1");
+					break;
+				case keymap.m:
+					model.updateScore(-1, "team2");
+					break;
+			}
 		}
 	});
 
 	$("div").on("dblclick", "div.uneditable", function(e) {
-		console.log(e);
+		editing = true;
 		var t = $(e.currentTarget)
 		t.html('<input type="text" value="'+t.html()+'">');
 		t.removeClass("uneditable").addClass("editable");
@@ -42,7 +49,7 @@ $(function() {
 
 	$("div").on("keypress", "div.editable", function(e) {
 		if (e.keyCode == keymap.enter) {
-			console.log(e);
+			editing = false;
 			var t = $(e.currentTarget);
 			t.html($(e.target).val());
 			t.removeClass("editable").addClass("uneditable");

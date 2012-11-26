@@ -1,0 +1,32 @@
+.team-info {
+	width:50%;
+	text-align: center;
+	display: inline-block;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+.team-info.left {
+	float:left;
+}
+
+.team-info.right {
+	float: right;
+}
+
+.team-title {
+	font-size: 4em;
+	/*font-style: bold;*/
+	margin-bottom: 30px;
+}
+
+.team-score {
+	font-size: 12em;
+	font-style: bold;
+}
+
+.vertical-center-container {
+	position: absolute;
+	top: 40%;
+	text-align: center;
+	width: 50%;
+}
