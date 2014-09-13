@@ -3,22 +3,23 @@
 	<head>
 		<title>Skóre</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
-		<script type="text/javascript" src="js/scoreboard.js"></script>
 		<link rel="stylesheet" href="css/style.css" type="text/css">
 	</head>
 	<body>
 		<div id="team-1" class="team-info left">
 			<div class="vertical-center-container">
 				<div class="team-title uneditable">Team 1</div>
-				<div id="team-1-score" class="team-score">0</div>
+				<div data-bind="text: t1" class="team-score">0</div>
 			</div>
 		</div>
 		<div id="team-2" class="team-info right">
 			<div class="vertical-center-container">
 				<div class="team-title uneditable">Team 2</div>
-				<div id="team-2-score" class="team-score">0</div>
+				<div data-bind="text: t2" class="team-score">0</div>
 			</div>
 		</div>
+	<script type="text/javascript" src="js/knockout.js"></script>
+	<script type="text/javascript" src="js/domDelegate.js"></script>
+	<script type="text/javascript" src="js/scoreboard.js"></script>
 	</body>
 </html>

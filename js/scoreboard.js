@@ -7,58 +7,63 @@ var keymap = {
 	"enter": 13
 }
 
-$(function() {
-	var model = {
-		"team1": 0,
-		"team2": 0,
-		updateScore: function updateScore(amount, team) {
-			if (this[team] + amount >= 0) {
-				this[team]+= amount;
-				render(this);
-			}
+var editing;
+
+var AppViewModel = function() {
+	this.t1 = ko.observable(0);
+	this.t2 = ko.observable(0);
+	
+	this.updateScore = function(change, team) {
+		var t;
+		switch (team) {
+			case 1:
+				t = this.t1;
+				break;
+			case 2:
+				t = this.t2;
+				break;
 		}
-	};
-
-	var editing = false;
-
-	$("html").on("keypress", function(e) {
+		if (t() + change < 0) {
+			return;
+		}
+		t(t() + change);
+	}
+	var that = this;
+	document.addEventListener("keypress", function(e) {
 		if (!editing) {
 			switch(e.keyCode) {
 				case keymap.t:
-					model.updateScore(1, "team1");
+					that.updateScore(1, 1);
 					break;
 				case keymap.u:
-					model.updateScore(1, "team2");
+					that.updateScore(1, 2);
 					break;
 				case keymap.b:
-					model.updateScore(-1, "team1");
+					that.updateScore(-1, 1);
 					break;
 				case keymap.m:
-					model.updateScore(-1, "team2");
+					that.updateScore(-1, 2);
 					break;
 			}
 		}
 	});
-
-	$("div").on("dblclick", "div.uneditable", function(e) {
-		editing = true;
-		var t = $(e.currentTarget)
-		t.html('<input type="text" value="'+t.html()+'">');
-		t.removeClass("uneditable").addClass("editable");
-	});
-
-	$("div").on("keypress", "div.editable", function(e) {
-		if (e.keyCode == keymap.enter) {
-			editing = false;
-			var t = $(e.currentTarget);
-			t.html($(e.target).val());
-			t.removeClass("editable").addClass("uneditable");
-		}
-	});
-
+}
+	
+var dd = new domDelegate.Delegate();
+dd.on("dblclick", "div.uneditable", function(e) {
+	editing = true;
+	e.currentTarget.innerHTML = '<input type="text" value="'+t.html()+'">';
+	e.currentTarget.classList.remove("uneditable");
+	e.currentTarget.classList.add("editable");
 });
 
-function render(model) {
-	$("#team-1-score").html(model["team1"]);
-	$("#team-2-score").html(model["team2"]);
-};
+dd.on("keypress", "div.editable", function(e) {
+	if (e.keyCode == keymap.enter) {
+		editing = false;
+		e.currentTarget.innerHTML = e.currentTarget.value;
+		e.currentTarget.classList.remove("editable");
+		e.currentTarget.classList.add("uneditable");
+	}
+});
+
+ko.applyBindings(new AppViewModel());
